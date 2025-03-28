@@ -29,8 +29,8 @@ The model is a Convolutional Neural Network (CNN) with:
  
  1.Clone the repository:
     
-    git clone https://github.com/evared2/proje1.git
-    cd mnist-classification
+    git clone https://github.com/evared2/digit_recognition_cnn.git
+
 
 
  2.Install dependencies:
