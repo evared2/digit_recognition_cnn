@@ -44,7 +44,7 @@ pip install -r requirements.txt
  3.Run the training script:
  
 ```sh
-python mnist_cnn.py
+python cnn_mnist.py
 ```
 
   
