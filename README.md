@@ -35,7 +35,7 @@ The model is a Convolutional Neural Network (CNN) with:
  2.Install dependencies:
  
 
-  pip install -r requirements.txt
+   pip install -r requirements.txt
 
 
  3.Run the training script:
