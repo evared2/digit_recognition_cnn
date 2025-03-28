@@ -1,6 +1,5 @@
-Code Explanation
-
 This Python code trains a Convolutional Neural Network (CNN) on the MNIST dataset to classify handwritten digits.
+
 Steps:
 
     Import Required Libraries:
@@ -51,7 +50,7 @@ Steps:
 
 
 
-About the dataset:
+About the Dataset:
 
 
 MNIST (Modified National Institute of Standards and Technology)
