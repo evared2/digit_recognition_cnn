@@ -34,14 +34,19 @@ The model is a Convolutional Neural Network (CNN) with:
 
  2.Install dependencies:
  
+  ```sh
+pip install -r requirements.txt
+```
 
-   pip install -r requirements.txt
 
 
  3.Run the training script:
  
+```sh
+python mnist_cnn.py
+```
 
-   python mnist_cnn.py
+  
 
 
  4.View results in the output folder.
