@@ -1,0 +1,76 @@
+Code Explanation
+
+This Python code trains a Convolutional Neural Network (CNN) on the MNIST dataset to classify handwritten digits.
+Steps:
+
+    Import Required Libraries:
+
+        Importing libraries such as tensorflow, numpy, matplotlib, and keras for model building, data handling, and visualization.
+
+    Load the MNIST Dataset:
+
+        The MNIST dataset (consisting of 28x28 grayscale images of digits) is loaded and split into training and test sets.
+
+    Preprocessing the Data:
+
+        Normalize the images to values between 0 and 1 for better model performance.
+
+        Reshape the labels to one-hot encoding format, which is required for classification.
+
+    Build the CNN Model:
+
+        The model consists of:
+
+            Conv2D Layers: Extract features from the images.
+
+            MaxPooling2D Layer: Reduce the spatial dimensions of the features.
+
+            Flatten Layer: Convert 2D features to 1D.
+
+            Dense Layer: Fully connected layers that learn the relationships between the features.
+
+            Output Layer: Softmax activation to output probabilities for the 10 possible digits (0-9).
+
+    Compile the Model:
+
+        Optimizer: Adam optimizer is used for updating the weights.
+
+        Loss Function: Categorical cross-entropy, as this is a multi-class classification problem.
+
+        Metric: Accuracy, to monitor the performance of the model.
+
+    Train the Model:
+
+        The model is trained on the training data for 5 epochs with a batch size of 64, and the performance is evaluated using the test data.
+
+    Visualize the Results:
+
+        Plot the training accuracy to visualize how the model improved during training.
+
+        Show an example of predicted labels for test images, compared with the true labels.
+
+
+
+About the dataset:
+
+
+MNIST (Modified National Institute of Standards and Technology)
+
+The MNIST dataset is a large collection of handwritten digits, commonly used for training image processing systems.
+Key Information:
+
+    Content: The dataset contains 28x28 grayscale images of handwritten digits (0-9).
+
+    Total Images: 70,000 images in total.
+
+        Training Set: 60,000 images.
+
+        Test Set: 10,000 images.
+
+    Labels: Each image is labeled with the corresponding digit (0-9).
+
+    Format: The dataset is stored in two parts:
+
+        Images: 28x28 pixel images.
+
+        Labels: Integer values (0-9) representing the digit in the image.
