@@ -1,0 +1,217 @@
+Ορίστε ο κώδικας για το mnist_cnn.py, που εκπαιδεύει το CNN για την αναγνώριση των χειρόγραφων ψηφίων από το MNIST dataset. Αυτός ο κώδικας χρησιμοποιεί την TensorFlow και την Keras για να δημιουργήσει και να εκπαιδεύσει το μοντέλο.
+
+import tensorflow as tf
+from tensorflow.keras import layers, models
+import numpy as np
+import matplotlib.pyplot as plt
+from tensorflow.keras.datasets import mnist
+
+# Φόρτωση των δεδομένων MNIST (60k εικόνες για εκπαίδευση, 10k εικόνες για δοκιμές)
+(train_images, train_labels), (test_images, test_labels) = mnist.load_data()
+
+# Προετοιμασία των δεδομένων
+train_images = train_images.reshape((train_images.shape[0], 28, 28, 1))  # 28x28 εικόνες με 1 κανάλι (άσπρο-μαύρο)
+test_images = test_images.reshape((test_images.shape[0], 28, 28, 1))
+
+# Κανονικοποίηση των εικόνων (0-255 -> 0-1)
+train_images, test_images = train_images / 255.0, test_images / 255.0
+
+# Δημιουργία του μοντέλου CNN
+model = models.Sequential([
+    layers.Conv2D(32, (3, 3), activation='relu', input_shape=(28, 28, 1)),
+    layers.MaxPooling2D((2, 2)),
+    layers.Conv2D(64, (3, 3), activation='relu'),
+    layers.MaxPooling2D((2, 2)),
+    layers.Conv2D(64, (3, 3), activation='relu'),
+    layers.Flatten(),
+    layers.Dense(64, activation='relu'),
+    layers.Dense(10, activation='softmax')  # 10 κατηγορίες για τα ψηφία 0-9
+])
+
+# Συνοπτική περιγραφή του μοντέλου
+model.summary()
+
+# Σύνθεση του μοντέλου (ορισμός optimizer, loss function και metrics)
+model.compile(optimizer='adam',
+              loss='sparse_categorical_crossentropy',
+              metrics=['accuracy'])
+
+# Εκπαίδευση του μοντέλου
+history = model.fit(train_images, train_labels, epochs=5, batch_size=64, validation_data=(test_images, test_labels))
+
+# Αξιολόγηση του μοντέλου με τα δεδομένα δοκιμής
+test_loss, test_acc = model.evaluate(test_images, test_labels)
+print(f"Test accuracy: {test_acc}")
+
+# Αποθήκευση του μοντέλου για μελλοντική χρήση
+model.save('mnist_cnn_model.h5')
+
+# Οπτικοποίηση της ιστορίας εκπαίδευσης (ακρίβεια και απώλεια)
+plt.plot(history.history['accuracy'], label='accuracy')
+plt.plot(history.history['val_accuracy'], label = 'val_accuracy')
+plt.xlabel('Epoch')
+plt.ylabel('Accuracy')
+plt.ylim([0, 1])
+plt.legend(loc='lower right')
+plt.title('Model Accuracy')
+plt.savefig('accuracy_plot.png')
+plt.show()
+
+# Προβλέψεις με το εκπαιδευμένο μοντέλο
+predictions = model.predict(test_images)
+
+# Εμφάνιση παραδείγματος πρόβλεψης
+fig, axes = plt.subplots(1, 5, figsize=(10, 5))
+for i in range(5):
+    axes[i].imshow(test_images[i].reshape(28, 28), cmap='gray')
+    axes[i].set_title(f"Pred: {np.argmax(predictions[i])}, True: {test_labels[i]}")
+    axes[i].axis('off')
+
+# Αποθήκευση παραδείγματος πρόβλεψης
+plt.savefig('example_predictions.png')
+plt.show()
+
+Εξήγηση του Κώδικα:
+
+    Φόρτωση των Δεδομένων:
+    Χρησιμοποιούμε την mnist.load_data() για να φορτώσουμε τα δεδομένα και τα διαχωρίζουμε σε δεδομένα εκπαίδευσης και δοκιμής.
+
+    Προετοιμασία των Δεδομένων:
+    Προσαρμόζουμε τις εικόνες ώστε να έχουν διάσταση (28, 28, 1) και τις κανονικοποιούμε από την κλίμακα [0, 255] σε [0, 1].
+
+    Δημιουργία του CNN:
+    Το μοντέλο έχει τρία convolutional layers (για χαρακτηριστικά), με max pooling για μείωση των διαστάσεων και δύο dense layers για ταξινόμηση.
+
+    Σύνθεση του Μοντέλου:
+    Χρησιμοποιούμε Adam optimizer και sparse_categorical_crossentropy loss, καθώς το πρόβλημα είναι πολυκατηγορικό (10 κατηγορίες).
+
+    Εκπαίδευση και Αξιολόγηση:
+    Εκπαιδεύουμε το μοντέλο για 5 epochs και αξιολογούμε την ακρίβεια του σε δεδομένα δοκιμής.
+
+    Αποθήκευση Αποτελεσμάτων:
+    Αποθηκεύουμε την ακρίβεια και το παράδειγμα προβλέψεων σε εικόνες.
+
+Περίληψη:
+
+Αυτός ο κώδικας δημιουργεί ένα CNN για την ταξινόμηση χειρόγραφων ψηφίων από το MNIST dataset, εκπαιδεύει το μοντέλο, το αξιολογεί και αποθηκεύει τα αποτελέσματα.
+
+Πριν τον εκτελέσεις:
+
+    Βεβαιώσου ότι έχεις εγκατεστημένο το TensorFlow με την εντολή:
+
+    pip install tensorflow
+
+Αν έχεις απορίες ή χρειάζεσαι βοήθεια με κάποιο βήμα, πες μου! 😊
+You said:
+αυτος ο κωδικασ δλδ αν τ δωσω μια φωτογραφια θ μ πει τ αριθμος αναγραφεται?
+ChatGPT said:
+
+Ακριβώς! 🎯
+
+Αυτός ο κώδικας που σου έδωσα είναι φτιαγμένος για να εκπαιδεύσει το μοντέλο με το MNIST dataset και να το χρησιμοποιήσει για να αναγνωρίζει χειρόγραφα ψηφία (από 0 έως 9).
+Αν θέλεις να δώσεις στο μοντέλο μια νέα φωτογραφία (όχι από το MNIST dataset) και να σου πει ποιος αριθμός αναγράφεται, χρειάζεσαι δύο επιπλέον βήματα:
+
+    Φόρτωση της εικόνας που θέλεις να αναγνωρίσεις.
+
+    Προεπεξεργασία της εικόνας ώστε να έχει την ίδια μορφή με τις εικόνες του MNIST (28x28 pixels και κανονικοποιημένη).
+
+    Πρόβλεψη με το εκπαιδευμένο μοντέλο.
+
+Ακολουθεί παράδειγμα κώδικα για να το κάνεις αυτό:
+
+from tensorflow.keras.preprocessing import image
+import numpy as np
+import matplotlib.pyplot as plt
+
+# Φόρτωση και προεπεξεργασία της εικόνας
+img_path = 'path_to_image.png'  # Αντικατάστησε με τη διαδρομή της εικόνας σου
+img = image.load_img(img_path, target_size=(28, 28), color_mode='grayscale')
+
+# Μετατροπή της εικόνας σε array και κανονικοποίηση
+img_array = image.img_to_array(img) / 255.0  # Κανονικοποίηση σε [0,1]
+img_array = np.expand_dims(img_array, axis=0)  # Προσθήκη διαστάσεων για batch size (1)
+
+# Πρόβλεψη του αριθμού
+prediction = model.predict(img_array)
+
+# Εμφάνιση της εικόνας και της πρόβλεψης
+plt.imshow(img, cmap='gray')
+plt.title(f'Predicted Label: {np.argmax(prediction)}')
+plt.axis('off')
+plt.show()
+
+Τι κάνει ο κώδικας:
+
+    Φόρτωση της εικόνας: Η εικόνα που θέλεις να αναγνωρίσεις φορτώνεται με τη βιβλιοθήκη PIL και αλλάζει μέγεθος σε 28x28 pixels.
+
+    Προεπεξεργασία: Μετατρέπει την εικόνα σε πίνακα (array) και την κανονικοποιεί (για να είναι στην κλίμακα [0, 1]).
+
+    Πρόβλεψη: Το εκπαιδευμένο μοντέλο κάνει πρόβλεψη για το ποιο ψηφίο είναι στην εικόνα.
+
+    Εμφάνιση: Εμφανίζει την εικόνα μαζί με την πρόβλεψη (τον αριθμό που αναγνωρίζει).
+
+Σημείωση:
+
+Η εικόνα που δίνεις πρέπει να είναι μονόχρωμη (grayscale) και να έχει μέγεθος 28x28 pixels, όπως τα δεδομένα του MNIST. Αν η εικόνα σου δεν είναι 28x28 ή έχει διαφορετικό χρώμα, θα πρέπει να την προσαρμόσεις κατάλληλα.
+
+Αν θέλεις βοήθεια με τη διαδικασία ή να το δοκιμάσουμε μαζί, πες μου! 😊
+You said:
+επισης πες μ τ ειναι keras
+ChatGPT said:
+
+Το Keras είναι μια βιβλιοθήκη για την ανάπτυξη και εκπαίδευση νευρωνικών δικτύων (neural networks). Είναι υψηλού επιπέδου και δουλεύει ως διεπαφή για χαμηλού επιπέδου βιβλιοθήκες, όπως το TensorFlow ή το Theano. Το Keras επιτρέπει στους χρήστες να κατασκευάζουν, να εκπαιδεύουν και να δοκιμάζουν νευρωνικά δίκτυα με ευκολία και ταχύτητα, χωρίς να χρειάζεται να κατανοούν σε βάθος τις χαμηλού επιπέδου υλοποιήσεις του αλγορίθμου.
+Κύρια Χαρακτηριστικά του Keras:
+
+    Ευκολία στη χρήση: Προσφέρει μια απλή και καθαρή διεπαφή για την κατασκευή μοντέλων, ακόμη και για αρχάριους στην τεχνητή νοημοσύνη.
+
+    Υψηλού επιπέδου API: Δημιουργία μοντέλων μέσω μιας απλής, σαφούς σύνταξης που είναι εύκολο να κατανοήσει κανείς.
+
+    Ευελιξία: Μπορείς να πειραματιστείς με διάφορες αρχιτεκτονικές (π.χ. CNN, RNN, LSTM) χωρίς να γράψεις πολύπλοκο κώδικα.
+
+    Πολλαπλές πλατφόρμες υποστήριξης: Στηρίζει το TensorFlow, το Theano, και παλαιότερα και το CNTK (Microsoft Cognitive Toolkit).
+
+Γιατί χρησιμοποιείται το Keras;
+
+    Ταχύτητα και ευκολία: Το Keras κάνει την ανάπτυξη των μοντέλων γρήγορη και χωρίς κόπο, δίνοντας τη δυνατότητα στους χρήστες να επικεντρωθούν στον πειραματισμό και την επίλυση προβλημάτων.
+
+    Ενσωμάτωση με TensorFlow: Από την έκδοση 2.0 του TensorFlow, το Keras έχει ενσωματωθεί πλήρως στο TensorFlow, καθιστώντας το τη βασική βιβλιοθήκη για την κατασκευή νευρωνικών δικτύων σε TensorFlow.
+
+Κύριες Συνιστώσες του Keras:
+
+    Model: Το κυριότερο αντικείμενο για την κατασκευή και εκπαίδευση νευρωνικών δικτύων. Δημιουργείς το μοντέλο χρησιμοποιώντας τις Sequential ή Functional APIs.
+
+    Layers: Τα layers είναι τα "δομικά στοιχεία" του δικτύου σου (π.χ. Dense, Conv2D, LSTM, κ.λπ.).
+
+    Loss Functions: Ορίζει την "απώλεια" (loss) που πρέπει να ελαχιστοποιηθεί κατά την εκπαίδευση (π.χ. categorical_crossentropy, mean_squared_error).
+
+    Optimizers: Εργαλεία για τη βελτιστοποίηση των παραμέτρων του δικτύου (π.χ. Adam, SGD).
+
+    Metrics: Μετρικές που παρακολουθούν την απόδοση του μοντέλου (π.χ. accuracy).
+
+Παράδειγμα Χρήσης του Keras:
+
+Ένα απλό παράδειγμα δημιουργίας ενός ανθρώπινου δικτύου νευρώνων με το Keras:
+
+import tensorflow as tf
+from tensorflow.keras import layers, models
+
+# Δημιουργία μοντέλου
+model = models.Sequential([
+    layers.Dense(64, activation='relu', input_shape=(784,)),  # Πρώτο κρυφό layer
+    layers.Dense(10, activation='softmax')  # Εξόδου (10 κατηγορίες)
+])
+
+# Συνοπτική περιγραφή του μοντέλου
+model.summary()
+
+# Σύνθεση του μοντέλου (ορισμός του optimizer και του loss function)
+model.compile(optimizer='adam', loss='sparse_categorical_crossentropy', metrics=['accuracy'])
+
+Συνοπτικά:
+
+Το Keras είναι ένα εύχρηστο και ισχυρό εργαλείο για την ανάπτυξη και εκπαίδευση μοντέλων μηχανικής μάθησης και τεχνητής νοημοσύνης. Με την υποστήριξή του για TensorFlow, είναι μια από τις πιο δημοφιλείς βιβλιοθήκες για νευρωνικά δίκτυα και deep learning.
+
+🔹 Θες να δεις κάποιο παράδειγμα ή να μάθεις περισσότερα για το πώς να το χρησιμοποιήσεις; 😊
+
+
+
