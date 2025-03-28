@@ -24,23 +24,23 @@ The model is a Convolutional Neural Network (CNN) with:
 
 
 
-    How to Run the Code :
-    1.Clone the repository:
+ How to Run the Code :
+ 1.Clone the repository:
     
     git clone https://github.com/yourusername/mnist-classification.git
     cd mnist-classification
 
 
-    2.Install dependencies:
+ 2.Install dependencies:
 
    pip install -r requirements.txt
 
 
-   3.Run the training script:
+ 3.Run the training script:
 
    python mnist_cnn.py
 
 
-  4.View results in the output folder.
+ 4.View results in the output folder.
 
 
