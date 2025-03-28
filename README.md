@@ -21,3 +21,26 @@ The model is a Convolutional Neural Network (CNN) with:
     2 max-pooling layers
     1 fully connected (dense) layer
     10 output classes (0-9)
+
+
+
+    How to Run the Code :
+    1.Clone the repository:
+    
+    git clone https://github.com/yourusername/mnist-classification.git
+    cd mnist-classification
+
+
+    2.Install dependencies:
+
+   pip install -r requirements.txt
+
+
+   3.Run the training script:
+
+   python mnist_cnn.py
+
+
+  4.View results in the output folder.
+
+
