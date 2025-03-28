@@ -25,6 +25,7 @@ The model is a Convolutional Neural Network (CNN) with:
 
 
  How to Run the Code :
+ 
  1.Clone the repository:
     
     git clone https://github.com/yourusername/mnist-classification.git
@@ -32,11 +33,13 @@ The model is a Convolutional Neural Network (CNN) with:
 
 
  2.Install dependencies:
+ 
 
-   pip install -r requirements.txt
+  pip install -r requirements.txt
 
 
  3.Run the training script:
+ 
 
    python mnist_cnn.py
 
