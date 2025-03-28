@@ -4,17 +4,17 @@ import numpy as np
 import matplotlib.pyplot as plt
 from tensorflow.keras.datasets import mnist
 
-# Φόρτωση των δεδομένων MNIST (60k εικόνες για εκπαίδευση, 10k εικόνες για δοκιμές)
+# Loading the MNIST dataset (60k images for training, 10k images for testing)
 (train_images, train_labels), (test_images, test_labels) = mnist.load_data()
 
-# Προετοιμασία των δεδομένων
+# Data preprocessing
 train_images = train_images.reshape((train_images.shape[0], 28, 28, 1))  # 28x28 εικόνες με 1 κανάλι (άσπρο-μαύρο)
 test_images = test_images.reshape((test_images.shape[0], 28, 28, 1))
 
-# Κανονικοποίηση των εικόνων (0-255 -> 0-1)
+# Normalization of images (0-255 -> 0-1)
 train_images, test_images = train_images / 255.0, test_images / 255.0
 
-# Δημιουργία του μοντέλου CNN
+# Creating the CNN model
 model = models.Sequential([
     layers.Conv2D(32, (3, 3), activation='relu', input_shape=(28, 28, 1)),
     layers.MaxPooling2D((2, 2)),
@@ -26,25 +26,25 @@ model = models.Sequential([
     layers.Dense(10, activation='softmax')  # 10 κατηγορίες για τα ψηφία 0-9
 ])
 
-# Συνοπτική περιγραφή του μοντέλου
+# Summary description of the model
 model.summary()
 
-# Σύνθεση του μοντέλου (ορισμός optimizer, loss function και metrics)
+# Model compilation (defining optimizer, loss function, and metrics)
 model.compile(optimizer='adam',
               loss='sparse_categorical_crossentropy',
               metrics=['accuracy'])
 
-# Εκπαίδευση του μοντέλου
+#Model training
 history = model.fit(train_images, train_labels, epochs=5, batch_size=64, validation_data=(test_images, test_labels))
 
-# Αξιολόγηση του μοντέλου με τα δεδομένα δοκιμής
+# Model evaluation with test data
 test_loss, test_acc = model.evaluate(test_images, test_labels)
 print(f"Test accuracy: {test_acc}")
 
-# Αποθήκευση του μοντέλου για μελλοντική χρήση
+# Saving the model for future use
 model.save('mnist_cnn_model.h5')
 
-# Οπτικοποίηση της ιστορίας εκπαίδευσης (ακρίβεια και απώλεια)
+# Visualization of the training history (accuracy and loss)
 plt.plot(history.history['accuracy'], label='accuracy')
 plt.plot(history.history['val_accuracy'], label = 'val_accuracy')
 plt.xlabel('Epoch')
@@ -55,17 +55,17 @@ plt.title('Model Accuracy')
 plt.savefig('accuracy_plot.png')
 plt.show()
 
-# Προβλέψεις με το εκπαιδευμένο μοντέλο
+# Predictions with the trained model
 predictions = model.predict(test_images)
 
-# Εμφάνιση παραδείγματος πρόβλεψης
+# Displaying example prediction
 fig, axes = plt.subplots(1, 5, figsize=(10, 5))
 for i in range(5):
     axes[i].imshow(test_images[i].reshape(28, 28), cmap='gray')
     axes[i].set_title(f"Pred: {np.argmax(predictions[i])}, True: {test_labels[i]}")
     axes[i].axis('off')
 
-# Αποθήκευση παραδείγματος πρόβλεψης
+#Saving example prediction
 plt.savefig('example_predictions.png')
 plt.show()
 
